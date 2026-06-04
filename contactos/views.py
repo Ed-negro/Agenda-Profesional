@@ -1,6 +1,4 @@
-from django.shortcuts import render
-
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from .models import Contacto
 from .forms import ContactoForm
 
@@ -8,6 +6,11 @@ from .forms import ContactoForm
 def lista_contactos(request):
     contactos = Contacto.objects.all()  # Consulta todos los contactos en SQLite
     return render(request, 'contactos/lista.html', {'contactos': contactos})
+
+# Vista para el detalle de un contacto
+def detalle_contacto(request, contacto_id):
+    contacto = get_object_or_404(Contacto, id=contacto_id)
+    return render(request, 'contactos/detalle.html', {'contacto': contacto})
 
 # Vista para el formulario de registro
 def crear_contacto(request):
@@ -20,3 +23,10 @@ def crear_contacto(request):
         form = ContactoForm()
     
     return render(request, 'contactos/formulario.html', {'form': form})
+
+# Vista para borrar un contacto existente
+def borrar_contacto(request, contacto_id):
+    contacto = get_object_or_404(Contacto, id=contacto_id)
+    if request.method == 'POST':
+        contacto.delete()
+    return redirect('lista_contactos')

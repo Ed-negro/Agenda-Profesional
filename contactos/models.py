@@ -10,6 +10,7 @@ class Contacto(models.Model):
     linkedin = models.URLField(max_length=200, blank=True, null=True)
     github = models.URLField(max_length=200, blank=True, null=True)
     habilidades = models.TextField(help_text="Lista corta de habilidades separadas por comas")
+    descripcion = models.TextField(blank=True, null=True, help_text="Descripción profesional completa")
 
     def __str__(self):
         return self.nombre
