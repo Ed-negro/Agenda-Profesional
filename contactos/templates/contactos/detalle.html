@@ -43,12 +43,15 @@
                         </li>
                     </ul>
                 </div>
-                <div class="d-flex justify-content-between">
+                <div class="d-flex justify-content-between gap-2">
                     <a href="{% url 'lista_contactos' %}" class="btn btn-secondary">Volver a lista</a>
-                    <form method="post" action="{% url 'borrar_contacto' contacto.id %}" onsubmit="return confirm('¿Estás seguro de que quieres borrar este contacto?');">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-danger">Borrar contacto</button>
-                    </form>
+                    <div class="d-flex gap-2">
+                        <a href="{% url 'editar_contacto' contacto.id %}" class="btn btn-warning">Editar contacto</a>
+                        <form method="post" action="{% url 'borrar_contacto' contacto.id %}" onsubmit="return confirm('¿Estás seguro de que quieres borrar este contacto?');">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Borrar contacto</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

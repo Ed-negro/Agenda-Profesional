@@ -12,6 +12,33 @@
             <a href="{% url 'crear_contacto' %}" class="btn btn-primary">+ Nuevo Contacto</a>
         </div>
         
+        <!-- Barra de búsqueda -->
+        <div class="card mb-4 shadow-sm">
+            <div class="card-body">
+                <form method="GET" class="d-flex gap-2">
+                    <input 
+                        type="text" 
+                        name="busqueda" 
+                        class="form-control" 
+                        placeholder="Buscar por nombre, correo o empresa..." 
+                        value="{{ busqueda }}"
+                        aria-label="Buscador de contactos"
+                    >
+                    <button type="submit" class="btn btn-outline-primary">
+                        <span>🔍 Buscar</span>
+                    </button>
+                    {% if busqueda %}
+                    <a href="{% url 'lista_contactos' %}" class="btn btn-outline-secondary">Limpiar</a>
+                    {% endif %}
+                </form>
+                {% if busqueda %}
+                <small class="text-muted mt-2 d-block">
+                    Resultados para: <strong>"{{ busqueda }}"</strong>
+                </small>
+                {% endif %}
+            </div>
+        </div>
+        
         <div class="row">
             {% for contacto in contactos %}
             <div class="col-md-4 mb-3">
@@ -33,7 +60,13 @@
             </div>
             {% empty %}
             <div class="col-12">
-                <div class="alert alert-info text-center">No hay contactos registrados aún.</div>
+                <div class="alert alert-info text-center">
+                    {% if busqueda %}
+                        No se encontraron contactos que coincidan con "<strong>{{ busqueda }}</strong>".
+                    {% else %}
+                        No hay contactos registrados aún.
+                    {% endif %}
+                </div>
             </div>
             {% endfor %}
         </div>
