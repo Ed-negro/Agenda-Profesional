@@ -1,3 +1,5 @@
+import re
+
 from django.shortcuts import get_object_or_404, redirect, render
 from django.db.models import Q
 from .models import Contacto
@@ -6,14 +8,16 @@ from .forms import ContactoForm
 # Vista para la pantalla principal (Lista de contactos)
 def lista_contactos(request):
     contactos = Contacto.objects.all()
-    busqueda = request.GET.get('busqueda', '')  # Obtiene el término de búsqueda del parámetro GET
+    busqueda = request.GET.get('busqueda', '').strip()  # Obtiene y limpia el término de búsqueda del parámetro GET
     
-    # Si hay un término de búsqueda, filtra los contactos por nombre (case-insensitive)
+    # Si hay un término de búsqueda, filtra los contactos por nombre, correo, empresa o habilidades
     if busqueda:
+        habilidades_regex = rf'(^|,\s*){re.escape(busqueda)}(\s*,|$)'
         contactos = contactos.filter(
             Q(nombre__icontains=busqueda) |  # Busca en el nombre
             Q(correo__icontains=busqueda) |   # También puede buscar en correo
-            Q(empresa__icontains=busqueda)    # Y en la empresa
+            Q(empresa__icontains=busqueda) |  # Y en la empresa
+            Q(habilidades__iregex=habilidades_regex)  # Busca tecnologías como tokens separados
         )
     
     return render(request, 'contactos/lista.html', {

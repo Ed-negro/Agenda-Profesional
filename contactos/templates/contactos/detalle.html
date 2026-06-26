@@ -1,60 +1,66 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>NetHub - Detalle del Contacto</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light">
-    <div class="container mt-5" style="max-width: 800px;">
-        <div class="card shadow">
-            <div class="card-header bg-primary text-white">
-                <h4 class="mb-0">Detalle de {{ contacto.nombre }}</h4>
+﻿{% extends 'contactos/base.html' %}
+
+{% block title %}NetHub - Detalle del Contacto{% endblock %}
+
+{% block content %}
+<div class="card-soft" style="max-width: 860px; margin: 0 auto;">
+    <div class="card-body">
+        <p class="section-title">Detalle del Contacto</p>
+        <h2>{{ contacto.nombre }}</h2>
+        <p class="meta-text mb-4">Perfil completo y datos de contacto.</p>
+
+        <div class="mb-4">
+            <h5 class="section-title">Información general</h5>
+            <p><strong>Correo:</strong> {{ contacto.correo }}</p>
+            <p><strong>Empresa:</strong> {{ contacto.empresa|default:"Ninguna" }}</p>
+            <p><strong>Habilidades:</strong></p>
+            <div class="d-flex flex-wrap gap-2">
+                {% for habilidad in contacto.habilidades_list %}
+                <span class="badge-tech">{{ habilidad }}</span>
+                {% endfor %}
+                {% if not contacto.habilidades_list %}
+                <span class="text-muted">No especificadas</span>
+                {% endif %}
             </div>
-            <div class="card-body">
-                <div class="mb-3">
-                    <h5 class="text-secondary">Información general</h5>
-                    <p><strong>Correo:</strong> {{ contacto.correo }}</p>
-                    <p><strong>Empresa:</strong> {{ contacto.empresa|default:"Ninguna" }}</p>
-                    <p><strong>Habilidades:</strong> {{ contacto.habilidades|default:"No especificadas" }}</p>
-                </div>
-                <div class="mb-3">
-                    <h5 class="text-secondary">Descripción profesional</h5>
-                    <p>{{ contacto.descripcion|default:"No hay descripción profesional registrada." }}</p>
-                </div>
-                <div class="mb-3">
-                    <h5 class="text-secondary">Enlaces</h5>
-                    <ul class="list-group">
-                        <li class="list-group-item">
-                            <strong>LinkedIn:</strong>
-                            {% if contacto.linkedin %}
-                                <a href="{{ contacto.linkedin }}" target="_blank" rel="noopener noreferrer">{{ contacto.linkedin }}</a>
-                            {% else %}
-                                <span class="text-muted">No disponible</span>
-                            {% endif %}
-                        </li>
-                        <li class="list-group-item">
-                            <strong>GitHub:</strong>
-                            {% if contacto.github %}
-                                <a href="{{ contacto.github }}" target="_blank" rel="noopener noreferrer">{{ contacto.github }}</a>
-                            {% else %}
-                                <span class="text-muted">No disponible</span>
-                            {% endif %}
-                        </li>
-                    </ul>
-                </div>
-                <div class="d-flex justify-content-between gap-2">
-                    <a href="{% url 'lista_contactos' %}" class="btn btn-secondary">Volver a lista</a>
-                    <div class="d-flex gap-2">
-                        <a href="{% url 'editar_contacto' contacto.id %}" class="btn btn-warning">Editar contacto</a>
-                        <form method="post" action="{% url 'borrar_contacto' contacto.id %}" onsubmit="return confirm('¿Estás seguro de que quieres borrar este contacto?');">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-danger">Borrar contacto</button>
-                        </form>
-                    </div>
-                </div>
+        </div>
+
+        <div class="mb-4">
+            <h5 class="section-title">Descripción profesional</h5>
+            <p>{{ contacto.descripcion|default:"No hay descripción profesional registrada." }}</p>
+        </div>
+
+        <div class="mb-4">
+            <h5 class="section-title">Enlaces</h5>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <strong>LinkedIn:</strong>
+                    {% if contacto.linkedin %}
+                        <a href="{{ contacto.linkedin }}" target="_blank" rel="noopener noreferrer">{{ contacto.linkedin }}</a>
+                    {% else %}
+                        <span class="text-muted">No disponible</span>
+                    {% endif %}
+                </li>
+                <li class="list-group-item">
+                    <strong>GitHub:</strong>
+                    {% if contacto.github %}
+                        <a href="{{ contacto.github }}" target="_blank" rel="noopener noreferrer">{{ contacto.github }}</a>
+                    {% else %}
+                        <span class="text-muted">No disponible</span>
+                    {% endif %}
+                </li>
+            </ul>
+        </div>
+
+        <div class="d-flex flex-column flex-md-row justify-content-between gap-3">
+            <a href="{% url 'lista_contactos' %}" class="btn btn-secondary">Volver a lista</a>
+            <div class="d-flex gap-2 flex-wrap">
+                <a href="{% url 'editar_contacto' contacto.id %}" class="btn btn-warning">Editar</a>
+                <form method="post" action="{% url 'borrar_contacto' contacto.id %}" onsubmit="return confirm('¿Estás seguro de que quieres borrar este contacto?');">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                </form>
             </div>
         </div>
     </div>
-</body>
-</html>
+</div>
+{% endblock %}

@@ -292,6 +292,15 @@ class ContactoBuscadorTest(TestCase):
         self.assertContains(respuesta, "Carlos López")
         self.assertNotContains(respuesta, "Maria García")
 
+    def test_busqueda_por_habilidades(self):
+        """Verifica que se pueda buscar por tecnologías o habilidades"""
+        respuesta = self.client.get(self.url_lista, {'busqueda': 'Java'})
+        
+        self.assertEqual(respuesta.status_code, 200)
+        self.assertContains(respuesta, "Carlos López")
+        self.assertNotContains(respuesta, "Juan Perez")
+        self.assertNotContains(respuesta, "Maria García")
+
     def test_busqueda_sin_resultados(self):
         """Verifica que la búsqueda sin resultados muestre mensaje apropiado"""
         respuesta = self.client.get(self.url_lista, {'busqueda': 'NoExiste'})
@@ -339,7 +348,7 @@ class ContactoBuscadorTest(TestCase):
         
         self.assertContains(respuesta, 'type="text"')
         self.assertContains(respuesta, 'name="busqueda"')
-        self.assertContains(respuesta, 'placeholder="Buscar por nombre, correo o empresa..."')
+        self.assertContains(respuesta, 'placeholder="Buscar por nombre, correo, empresa o tecnología..."')
 
     def test_boton_limpiar_aparece_con_busqueda(self):
         """Verifica que el botón de limpiar solo aparece cuando hay búsqueda"""

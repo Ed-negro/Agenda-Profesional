@@ -12,5 +12,11 @@ class Contacto(models.Model):
     habilidades = models.TextField(help_text="Lista corta de habilidades separadas por comas")
     descripcion = models.TextField(blank=True, null=True, help_text="Descripción profesional completa")
 
+    @property
+    def habilidades_list(self):
+        if not self.habilidades:
+            return []
+        return [habilidad.strip() for habilidad in self.habilidades.split(',') if habilidad.strip()]
+
     def __str__(self):
         return self.nombre
